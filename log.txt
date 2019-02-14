@@ -1,0 +1,12 @@
+commit 0a7b4427e975062d97082aa11f33e078b2876892 (HEAD -> master)
+Author: Vladislav <vladshwork@gmail.com>
+Date:   Thu Feb 14 18:28:59 2019 +0300
+
+    change status.txt
+
+commit 60a2215d6592435b4724f32bcc8f0be16c575ba9
+Author: Vladislav <vladshwork@gmail.com>
+Date:   Thu Feb 14 18:17:09 2019 +0300
+
+    add .gitignore
+
