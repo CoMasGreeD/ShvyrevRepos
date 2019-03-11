@@ -23,23 +23,31 @@ k2
     font: 1em cursive;
     color: rgb(51, 36, 182);
 }
+
+
 #square {
-    margin-left: 65px;
-    width: 600px;
+  /*  margin-left: 65px;*/
+   max-width: 80%;
     border-radius: 10px;
-	height: 100px;
+    margin-top: 5px ;
+    margin-left: 60px;
+    height: 100px;
+    position: relative;
 	background: linear-gradient(to right,rgb(217, 160, 219) 30%,rgb(205, 235, 125) 50%);
 }
 #square1 {
-    margin-left: 65px;
-    width: 500px;
+    /*margin-left: 65px;*/
+    max-width: 80%;
     border-radius: 10px;
     height: 50px;
     background: white;
+    margin: 10px auto;
+    position: relative;
 }
-p{
+ p{
     margin-top: 1px;
     margin-bottom: 1px;
+   
 }
 hr
 {
@@ -57,9 +65,19 @@ body
     position: relative;
     background-image: url(fon.jpg);
 }
-.photo
-{
+
+.photo-wrapper {
     position: relative;
+}
+.photo-wrapper .slider {
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.photo-wrapper .photo {
     display: block;
     max-width: 90%;
     height: 450px;
@@ -70,33 +88,26 @@ body
 }
 .leftangle
 {
-    margin-left: 0px;
-    margin-right: 0px;
-    bottom: 280px;
-    left: 20px;
-    z-index: 5;
-    position: relative;
     display: block;
     max-width: 8%;
+    z-index: 5;
+    height: 20px;
+    margin-left: 5%;
     
 }
 .rightangle
 {
-    left: 640px;
-    right: auto;
-    bottom: 326px;
-    margin-left: 0px;
-    margin-right: 0px;
     z-index: 5;
-    position: relative;
     display: block;
     max-width: 8%;
+    margin-right: 5%;
+    height: 20px;
    
 }
 div
 {
     position: relative;
-    background: linear-gradient(to right,rgb(61,233,221) 30%,rgb(239,169,241) 50%);
+   /* background: linear-gradient(to right,rgb(61,233,221) 30%,rgb(239,169,241) 50%);*/
 }
 span.panelTitleTxt1 {
     display: block;
@@ -104,3 +115,12 @@ span.panelTitleTxt1 {
     height: 100%;
     margin: 0 auto;
 }
+main
+{
+    background: linear-gradient(to right,rgb(61,233,221) 30%,rgb(239,169,241) 50%);
+} 
+header
+{
+    background: linear-gradient(to right,rgb(61,233,221) 30%,rgb(239,169,241) 50%);
+}
+footer{ background: linear-gradient(to right,rgb(61,233,221) 30%,rgb(239,169,241) 50%);}
