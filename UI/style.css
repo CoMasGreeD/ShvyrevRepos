@@ -47,7 +47,6 @@ k2
  p{
     margin-top: 1px;
     margin-bottom: 1px;
-   
 }
 hr
 {
@@ -114,6 +113,12 @@ span.panelTitleTxt1 {
     width: 100%;
     height: 100%;
     margin: 0 auto;
+}
+p.name
+{
+    text-align: center;
+    font: 1em cursive;
+    color: red;
 }
 main
 {
