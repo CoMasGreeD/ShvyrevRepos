@@ -88,7 +88,7 @@
     }
    /* Это функция через indexOf не хочет работать корректно, поэтому вернулся к старому рабочему варианту
    function findPostIndex(id) {  
-                return photoPosts.indexOf(function(post){
+                return photoPosts.find(function(post){
                     return post.id === id;
                 });
    }*/ 

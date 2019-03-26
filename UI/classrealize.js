@@ -1,29 +1,84 @@
 
 class photoPost {
 
-    constructor(photoLink = '', author = '', description = '', date = new Date('1999-06-28T07:00:00'), id = '') {
+    constructor(photoLink = '', author = '', description = '', date = new Date('1999-06-28T07:00:00'), id = '', hashtags = [], liked = []) {
         this.author = author;
         this.photoLink = photoLink;
         this.description = description;
         this.id = id;
         this.date = date;
+        this.liked = liked;
+		this.hashtags = hashtags;
 
     }
 
     validatePhotoPost() {
-        if (this.id && typeof (this.id) === 'string') {
-            if (this.author && typeof (this.author) === 'string' && this.author.length != 0) {
-                if (this.description && typeof (this.description) === 'string' && this.description.length <= 200) {
-                    if (this.date && typeof (this.date) === 'object') {
-                        if (this.photoLink && typeof (this.photoLink) === 'string' && this.photoLink.length != 0) {
-                            return true;
-                        } else { return false }
-                    } else { return false }
-                } else { return false }
-            } else { return false }
-        } else { return false }
+        function validateID () {
+            return this.id && typeof (this.id) === 'string';
+        }
 
+        function validateDescription() {
+            return this.description && typeof (this.description) === 'string' && this.description.length <= 200;
+        }
+
+        function validateCreatedAt() {
+            return this.date && typeof (this.date) === 'object';
+        }
+
+        function validateAuthor() {
+            return this.author && typeof (this.author) === 'string' && this.author.length != 0;
+        }
+
+        function validatePhotoLink() {
+            return this.photoLink && typeof (this.photoLink) === 'string' && this.photoLink.length != 0;
+        }
+        function validateLiked() {
+            return this.liked && Array.isArray(this.liked) && this.liked.every(function(elem){
+                return (typeof(elem)==='string');
+            });
+        }
+
+        function validateHashtags() {
+            return this.hashtags && Array.isArray(this.hashtags) && this.liked.every(function(elem){
+                return (typeof(elem)==='string');
+            });
+        }
+        return  function validateAllAttr() {
+            return (validateID()
+                && validateDescription()
+                && validateCreatedAt()
+                && validateAuthor()
+                && validatePhotoLink()
+                && validateHashtags()
+                && validateLiked())
+        }
     }
+}
+
+class Filter {
+
+	constructor(f_author = '', f_hashtags = [], f_date = true) {
+		this.f_author = f_author;
+		this.f_hashtags = f_hashtags;
+		this.f_date = f_date;
+	}
+
+	isEmptyFilter() {
+
+		if (this.f_author === '' && this.f_hashtags.length === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	validateFilter() {
+
+		if (typeof (this.f_author) !== 'string' || !isStringArray(this.f_hashtags)) {
+			return false;
+		}
+		return true;
+	}
 }
 
 
@@ -33,9 +88,69 @@ class photoPosts {
         this._posts = postsList.slice();
     }
 
-    getPhotoPosts(skip = 0, top = 10) {
-        this._sortByDate();
-        return this._posts.slice(skip, skip + top);
+    _filterByAuthor(num, author, posts) {
+
+		if (!(typeof (author) === 'string')) {
+			console.log('Incorrect argument!');
+			return undefined;
+		}
+
+		let found = [];
+		let count = 0;
+
+		for (let i = 0; (i < posts.length) && (count < num); ++i) {
+			if (posts[i].photo.author === author) {
+				found.push(posts[i]);
+				count++;
+			}
+		}
+		return found;
+    }
+    
+    _filterByHashtags(num, hashtags, posts) {
+
+		let flag = true;
+		let found = [];
+		let count = 0;
+
+		for (let i = 0; (i < posts.length) && (count < num); ++i) {
+			flag = true;
+			for (let j = 0; j < hashtags.length; ++j) {
+				if (!posts[i].hashtags.includes(hashtags[j])) {
+					flag = false;
+					break;
+				}
+			}
+			if (flag) {
+				found.push(posts[i]);
+				count++;
+			}
+		}
+		return found;
+    }
+    
+    getPhotoPosts(skip = 0, top = 10, filterConfig = new Filter()) {
+        let result = [];
+
+        result = this._posts.slice();
+
+        if (!(filterConfig.isEmptyFilter()) && filterConfig.validateFilter()) {
+
+			if (filterConfig.f_author !== '') {
+				result = this._filterByAuthor(top + skip, filterConfig.f_author, result);
+			}
+			if (filterConfig.f_hashtags.length !== 0) {
+				result = this._filterByHashtags(top + skip, filterConfig.f_hashtags, result);
+			}
+			result = result.slice(skip);
+
+		} else {
+			result= this._posts.slice(skip, skip + top);
+		}
+        
+        this._sortByDate(result);
+
+        return result;
     }
 
     getPhotoPostByID(id) {
@@ -59,12 +174,10 @@ class photoPosts {
         }
 
         post.photoLink = new_post.photoLink;
-        post.author = new_post.author;
         post.description = new_post.description;
+        post.hashtags = new_post.hashtags.slice();
     }
-    sizePhotoPosts() {
-        return this._posts.length;
-    }
+
     addPhotoPost(post) {
         if (post.validatePhotoPost()) {
             this._posts.push(post);
@@ -79,9 +192,9 @@ class photoPosts {
         }
     }
 
-    _sortByDate() {
+    _sortByDate(res) {
 
-        this._posts.sort(function (post1, post2) {
+        res.sort(function (post1, post2) {
             return -(post1.date - post2.date);
         });
         return true;
@@ -123,6 +236,6 @@ console.log(posts2.clear());
 console.log(posts.removePhotoPost('2'));
 console.log(posts.getPhotoPosts());
 console.log(posts.getPhotoPostByID('3'));
-let tmp=new photoPost('sdsd.jpg','nobody','WHY??',new Date(),'4')
+let tmp = new photoPost('sdsd.jpg', 'nobody', 'WHY??', new Date(), '4')
 posts.editPhotoPost('4', tmp);
 console.log(posts.getPhotoPosts());
