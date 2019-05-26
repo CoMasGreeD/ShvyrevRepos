@@ -1,0 +1,1 @@
+SELECT * FROM photo_post WHERE user_id=4 and CREATION_DATE LIKE "2019-05-01%";
